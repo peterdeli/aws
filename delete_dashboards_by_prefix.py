@@ -4,7 +4,7 @@
 import boto3, json, os, glob
 
 def delete_dashboards_by_prefix(prefix):
-    os.chdir("/home/centos/bin")
+    os.chdir("BIN_DIR")
     client1 = boto3.client('cloudwatch' )
     delete_list=[]
     current_dashboards = client1.list_dashboards( DashboardNamePrefix=prefix )
