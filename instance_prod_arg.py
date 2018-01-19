@@ -7,7 +7,7 @@ from collections import defaultdict
 import sys, os
 
 def get_running_instances():
-    region='us-east-1'
+    region='AWS_REGION'
     ec2 = boto3.resource('ec2', region_name=region)
     instances = ec2.instances.filter(
     Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
@@ -18,27 +18,15 @@ def get_running_instances():
     
 def get_instance_statuses():
     
-    # {'InstanceState': {'Code': 16, 'Name': 'running'}, 
-    # 'InstanceStatus': {'Details': [{'Name': 'reachability', 'Status': 'passed'}], 'Status': 'ok'}, 
-    #'SystemStatus': {'Details': [{'Name': 'reachability', 'Status': 'passed'}], 'Status': 'ok'}, 
-    #'InstanceId': 'i-019c4789ecc6a5eb1', 
-    #'AvailabilityZone': 'us-east-1c'}
-    
-    region='us-east-1'
+    region='AWS_REGION'
     ec2 = boto3.resource('ec2', region_name=region)
     instance_status_dict = {}
     for status in ec2.meta.client.describe_instance_status()['InstanceStatuses']:
         instance_status_dict[status['InstanceId']] = status
-        
-    #     instance_status_dict['i-035b08b8a58bd5476']
-    #     {'AvailabilityZone': 'us-east-1b', 'InstanceStatus': {'Details': [{'Name': 'reachability', 'Status': 'passed'}], 'Status': 'ok'}, 'SystemStatus': {'Details': [{'Name': 'reachability', 'Status': 'passed'}], 'Status': 'ok'}, 'InstanceId': 'i-035b08b8a58bd5476', 'InstanceState': {'Code': 16, 'Name': 'running'}}
-    #     >>> instance_status_dict['i-035b08b8a58bd5476']['InstanceStatus']
-    #     {'Details': [{'Name': 'reachability', 'Status': 'passed'}], 'Status': 'ok'}
-    #     >>> instance_status_dict['i-035b08b8a58bd5476']['InstanceStatus']['Status']
-    #     'ok'
     return instance_status_dict
+
 def get_instance_status(state):    
-    region='us-east-1'
+    region='AWS_REGION'
     session = boto3.Session()
     ec2 = session.resource('ec2', region_name=region)
     if ( state == 'running' ):
@@ -61,7 +49,7 @@ def get_instance_status(state):
     return instance_dict
 
 def get_instances(state):
-    region='us-east-1'
+    region='AWS_REGION'
     session = boto3.Session()
     ec2 = session.resource('ec2', region_name=region)
     if ( state == 'running' ):
